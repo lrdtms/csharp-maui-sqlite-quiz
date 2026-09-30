@@ -113,7 +113,7 @@ mc('t3', r`What does Console.WriteLine($"{price:C}"); print when price is 1234.5
   '$1,234.50 (symbol depends on region settings)', ['1234.5C', '1,234.5', '123450%'],
   'C is the currency format. The symbol and separators come from the computer\'s region settings.',
   'decimal price = 1234.5m;\nConsole.WriteLine($"{price:C}");');
-fill('t3', 'Which format code shows a percentage? (one letter)', ['p', 'P'], 'P is percentage: 0.25 with P shows 25.00% (P0 gives 25%).');
+fill('t3', 'Which format code shows a percentage? (one letter)', ['p', 'P'], 'P is percentage: 0.25 shows 25.00% in en-US because the default number of decimals comes from the culture (P0 gives 25%).');
 mc('t3', 'What does {x,-10} do inside an interpolated string?',
   'Left-aligns the value in a 10-character-wide column', ['Right-aligns the value in 10 characters', 'Shows 10 decimal places', 'Subtracts 10 from x'],
   'A positive width right-aligns; a negative width left-aligns.');
@@ -163,7 +163,7 @@ cq('t4', 'What is printed?', '5 then 6', ['6 then 6', '5 then 5', '6 then 5'],
   'int x = 5;\nConsole.WriteLine(x++);\nConsole.WriteLine(x);');
 fill('t4', 'Complete the call so the result is 4: Math.____(16)', ['sqrt', 'Sqrt'], 'Math.Sqrt gives the square root.');
 mc('t4', 'Which conversion does C# do automatically (implicit)?', 'int to decimal', ['decimal to int', 'double to int', 'double to decimal'],
-  'Implicit conversions only happen when every value of the source type fits in the target (for example int to long or int to decimal). Anything that might lose data, including double to decimal, needs an explicit cast.');
+  'C# only converts implicitly when the value cannot lose its size or data in a way that matters (for example int to long or int to decimal). Learn states there are no implicit conversions from double or decimal, and none between decimal and float/double, so those need an explicit cast.');
 mc('t4', 'What does total += 5 mean?', 'total = total + 5', ['total = 5', 'total = total * 5', 'total = 5 - total'], 'Compound assignment does the maths and assigns in one step.');
 
 /* ---------- 5. Guided Projects ---------- */
@@ -284,7 +284,7 @@ fill('t11', 'Which attribute gives a resource its name? (x:____)', ['x:Key', 'Ke
 mc('t11', 'Resources defined in App.xaml are available...', 'Everywhere in the app', ['Only on the first page', 'Only in one control', 'Only in Shell'], 'Page.Resources is for one page; Control.Resources for one control.');
 mc('t11', 'The same key exists in App.xaml and in a page. Which value does a control on that page use?', 'The page\'s value (closest wins)', ['The App value', 'Neither - it is an error', 'Both are merged'], 'The closest scope overrides.');
 mc('t11', 'What does BasedOn do in a style?', 'Makes the style build on (inherit from) another style', ['Sets the target platform', 'Binds to data', 'Declares a colour'], 'Styles can build on each other using BasedOn.');
-tf('t11', 'Within a page, a StaticResource must be defined before (above) the element that uses it.', true, 'StaticResource performs a single lookup up the visual tree and then App.Resources when the element is created, so forward references in the same file are not supported.');
+tf('t11', 'A StaticResource looks its key up once, when the element is created, while a DynamicResource keeps a link to the key so later changes are applied.', true, 'That is the documented difference: StaticResource performs a single dictionary lookup; DynamicResource maintains a link to the dictionary key.');
 mc('t11', 'You want controls to update when the app switches themes. Which do you use?', 'DynamicResource', ['StaticResource', 'x:Name', 'BindingContext'], 'It keeps watching so the control updates.');
 mc('t11', 'What does TargetType="Label" on a Style mean?', 'The style is for Label controls', ['The style can only be used once', 'The style is for one page', 'The style sets a namespace'], 'TargetType names the control type the style applies to.');
 
