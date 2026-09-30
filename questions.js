@@ -35,10 +35,10 @@ mc('t1', 'What is the only difference between Console.Write and Console.WriteLin
   'Write prints and stays on the same line, WriteLine prints and then starts a new line, like pressing Enter.');
 tf('t1', 'Almost every C# statement ends with a semicolon.', true,
   'The semicolon is like a full stop: it tells the compiler where one instruction ends and the next begins.');
-fill('t1', 'The symbol that ends a C# statement is the ____ (name it or type the symbol).', ['semicolon', ';'],
+fill('t1', 'The symbol that ends a C# statement is the ____ (name it or type the symbol).', ['semicolon', 'a semicolon', 'the semicolon', ';'],
   'Statements end with a semicolon.');
 cq('t1', 'What does this program display?', 'Good morning (all on one line)',
-  ['Good', 'Good\nmorning (two lines)', 'Nothing - it will not compile'],
+  ['Good', '"Good" and "morning" on two separate lines', 'Nothing - it will not compile'],
   'Console.Write does not start a new line, so the second piece continues right after the first.',
   'Console.Write("Good ");\nConsole.Write("morning");');
 mc('t1', 'In Console.WriteLine("Hello"); what is "Hello"?',
@@ -60,7 +60,7 @@ tf('t1', 'Comments are executed by the program at run time.', false,
 mc('t1', 'In Console.WriteLine("Hello"); what is Console?',
   'A class (a toolbox of related tools)', ['A method', 'An argument', 'A string literal'],
   'Console is a class, WriteLine is a method (one tool inside the toolbox), and the dot means "look inside".');
-fill('t1', 'WriteLine is a ____ (one tool inside the Console class).', ['method'], 'Methods are named actions you call with parentheses.');
+fill('t1', 'WriteLine is a ____ (one tool inside the Console class).', ['method', 'a method'], 'Methods are named actions you call with parentheses.');
 mc('t1', 'Which is the correct order of the journey from code to output?',
   'Write, compile, run, output', ['Compile, write, run, output', 'Write, run, compile, output', 'Run, write, compile, output'],
   'Step 2 (compile) is where syntax errors are caught.');
@@ -92,9 +92,9 @@ mc('t2', 'What causes the error "use of unassigned local variable"?',
 tf('t2', 'You can declare two variables with the same name in the same scope.', false,
   'You can change a value later by assigning again, but you cannot declare the same name twice in one scope.');
 mc('t2', 'Which is a valid C# variable name?', '_total', ['2ndScore', 'class', 'first-name'],
-  'Names start with a letter or underscore, contain letters/digits/underscores, and cannot be keywords like class.');
+  'Names start with a letter or underscore, contain letters/digits/underscores, and cannot be keywords like class (unless prefixed with @, e.g. @class).');
 mc('t2', 'Why does C# refuse to put a double into a decimal variable without being told?',
-  'Information might be lost, so the compiler asks you to be explicit', ['decimal is smaller than double', 'double values are always wrong', 'Variables cannot change type'],
+  'Information might be lost, so the compiler asks you to be explicit', ['decimal cannot store fractions', 'double values are always wrong', 'Variables cannot change type'],
   'Errors about "cannot convert" are the compiler protecting you from silently losing data.');
 
 /* ---------- 3. String Formatting ---------- */
@@ -113,7 +113,7 @@ mc('t3', r`What does Console.WriteLine($"{price:C}"); print when price is 1234.5
   '$1,234.50 (symbol depends on region settings)', ['1234.5C', '1,234.5', '123450%'],
   'C is the currency format. The symbol and separators come from the computer\'s region settings.',
   'decimal price = 1234.5m;\nConsole.WriteLine($"{price:C}");');
-fill('t3', 'Which format code shows a percentage? (one letter)', ['p', 'P'], 'P is percentage: 0.25 becomes 25%.');
+fill('t3', 'Which format code shows a percentage? (one letter)', ['p', 'P'], 'P is percentage: 0.25 with P shows 25.00% (P0 gives 25%).');
 mc('t3', 'What does {x,-10} do inside an interpolated string?',
   'Left-aligns the value in a 10-character-wide column', ['Right-aligns the value in 10 characters', 'Shows 10 decimal places', 'Subtracts 10 from x'],
   'A positive width right-aligns; a negative width left-aligns.');
@@ -126,7 +126,7 @@ mc('t3', 'A symbol shows as a question mark in the console. What usually fixes i
   'Console.OutputEncoding = System.Text.Encoding.UTF8;', ['Adding a semicolon', 'Using var instead of string', 'Using Console.Write instead of WriteLine'],
   'The console may not be using the right encoding for that Unicode character.');
 mc('t3', 'You need variables AND literal backslashes in one string. What do you use?', '$@"..." (interpolation and verbatim together)', ['@+"..." with a plus sign', 'It is impossible in C#', 'Only Unicode escapes'],
-  'You can combine both features as $@"..." when you need variables and backslashes in the same string.');
+  'You can combine both features as $@"..." (or @$"...") when you need variables and backslashes in the same string.');
 mc('t3', 'How do you write one double-quote character inside a verbatim string?', 'Write two double quotes ("")', [r`Write \"`, 'Write a single quote', 'You cannot'],
   'Inside an @ string, "" gives one quote.');
 
@@ -158,12 +158,12 @@ tf('t4', 'Casting a decimal to an int rounds the value to the nearest whole numb
 mc('t4', 'What happens if an int calculation goes above int.MaxValue at run time?',
   'It silently wraps around to a large negative number', ['The program stops with a compile error', 'It automatically becomes a long', 'It becomes 0'],
   'int has a fixed size and overflow does not show an error by default.');
-cq('t4', 'What is printed on the second line?', '5 then 6', ['6 then 6', '5 then 5', '6 then 5'],
+cq('t4', 'What is printed?', '5 then 6', ['6 then 6', '5 then 5', '6 then 5'],
   'x++ gives the old value first and then changes the variable. (++x would change it first.)',
   'int x = 5;\nConsole.WriteLine(x++);\nConsole.WriteLine(x);');
 fill('t4', 'Complete the call so the result is 4: Math.____(16)', ['sqrt', 'Sqrt'], 'Math.Sqrt gives the square root.');
 mc('t4', 'Which conversion does C# do automatically (implicit)?', 'int to decimal', ['decimal to int', 'double to int', 'double to decimal'],
-  'Moving into a bigger type is safe (widening). Moving into a smaller type needs an explicit cast.');
+  'Implicit conversions only happen when every value of the source type fits in the target (for example int to long or int to decimal). Anything that might lose data, including double to decimal, needs an explicit cast.');
 mc('t4', 'What does total += 5 mean?', 'total = total + 5', ['total = 5', 'total = total * 5', 'total = 5 - total'], 'Compound assignment does the maths and assigns in one step.');
 
 /* ---------- 5. Guided Projects ---------- */
@@ -202,18 +202,18 @@ mc('t6', 'Where does code that is specific to one operating system go?', 'The Pl
   'Only a small amount of platform-specific code lives in Platforms.');
 mc('t6', 'Which file defines the navigation structure (tabs and flyout)?', 'AppShell.xaml', ['App.xaml', 'MauiProgram.cs', 'MainPage.xaml'], 'AppShell.xaml lists the top-level pages.');
 mc('t6', 'What is App.xaml used for?', 'App-wide things such as shared styles and colours', ['Platform-specific code', 'The first page layout', 'Building the database'], 'It holds application-level resources and startup.');
-tf('t6', 'Building a MAUI app for iOS needs a connected Mac.', true, 'Windows is quick for first runs; then test on Android and iOS.');
+tf('t6', 'Building and publishing a MAUI app for iOS from Windows requires a paired Mac build host.', true, "Apple's build tools only run on macOS, so Visual Studio pairs with a Mac. (Hot Restart in VS 2022 can deploy debug builds to a USB-connected iPhone without a Mac, but not release builds.) Run on Windows first, then test on Android and iOS.");
 fill('t6', 'The method in MauiProgram.cs that builds and returns the app is ____', ['CreateMauiApp', 'CreateMauiApp()'], 'It creates a builder, registers the app class, fonts and services, and returns the finished app.');
 tf('t6', 'With MAUI you need a separate project and language for each platform.', false, 'That was the problem MAUI removes: a single project, single codebase.');
 mc('t6', 'On Android, what does a MAUI Button become at run time?', 'A real native Android button', ['A web page button', 'An image of a button', 'A Windows button'],
   'MAUI maps each shared control to the matching native control.');
 mc('t6', 'What is MainPage.xaml.cs?', 'The code-behind (C# logic) for MainPage.xaml', ['The page layout', 'The app configuration', 'A platform setting file'], 'XAML is the look; the .xaml.cs file is the behaviour.');
-mc('t6', 'Image files in Resources/Images should use what kind of names?', 'Lowercase names', ['Uppercase names', 'Names with spaces', 'Names with no extension'], 'The cheat sheet says to use lowercase names; images are resized per platform.');
+mc('t6', 'Image files in Resources/Images should use what kind of names?', 'Lowercase names', ['Uppercase names', 'Names with spaces', 'Names with no extension'], 'To comply with Android rules, image filenames must be lowercase, start and end with a letter, and contain only letters, digits or underscores. Vector images (SVG) are resized per platform at build time.');
 mc('t6', 'Which tooling is used to build MAUI apps in this guide?', 'Visual Studio 2022 with the .NET MAUI workload', ['Notepad and a browser', 'Only the Android Studio IDE', 'Xcode only'], 'Choose a target from the toolbar: Windows, an Android emulator or a device.');
 fill('t6', 'Which element in the .csproj lists the platforms a project builds for? (name only, no angle brackets)', ['TargetFrameworks', 'targetframeworks'], 'The .csproj lists <TargetFrameworks>.');
 
 /* ---------- 7. XAML ---------- */
-mc('t7', 'How many children can a ContentPage hold?', 'Exactly one', ['As many as you like', 'Two', 'None - it can only hold text'],
+mc('t7', 'How many children can a ContentPage hold?', 'One (its single Content view)', ['As many as you like', 'Two', 'None - it can only hold text'],
   'That is why you usually put a layout inside it and the controls inside the layout.');
 fill('t7', 'Which attribute links a XAML page to its code-behind class? (e.g. x:____)', ['x:Class', 'Class', 'class'], 'x:Class joins the two files into one partial class.');
 fill('t7', 'The constructor calls ____() to read the XAML and build the controls.', ['InitializeComponent', 'InitializeComponent()'], 'Without it, the controls are never created.');
@@ -247,12 +247,12 @@ mc('t8', 'Which layout wraps items like text?', 'FlexLayout', ['AbsoluteLayout',
 /* ---------- 9. Data Binding ---------- */
 mc('t9', 'In a binding, which side is the target and which is the source?', 'Target = the UI control property; source = the data property', ['Target = data; source = control', 'Both are data objects', 'Both are controls'], 'Label.Text (target) is bound to Person.Name (source).');
 mc('t9', 'What does Text="{Binding Name}" mean?', 'Get Text from the Name property of the BindingContext', ['Set Text to the string "Name"', 'Create a property called Name', 'Call a method called Name'], 'The source object is set in BindingContext and passed down to children.');
-mc('t9', 'You misspell a bound property name. What happens?', 'No compile error - the control simply shows nothing', ['A compile error', 'The app crashes at startup', 'The text is shown in red'], 'Bindings are resolved while the app runs. Check the Output window when a bound value stays blank.');
+mc('t9', 'Without x:DataType (a classic binding), you misspell a bound property name. What happens?', 'No compile error - the control simply shows nothing', ['A compile error', 'The app crashes at startup', 'The text is shown in red'], 'Bindings are resolved while the app runs. Check the Output window when a bound value stays blank. (With compiled bindings, x:DataType, the mistake becomes a build error.)');
 fill('t9', 'Which interface lets a data object tell the UI that a property changed? (name)', ['INotifyPropertyChanged'], 'It raises the PropertyChanged event inside each property setter.');
 mc('t9', 'Which binding mode do input controls such as Entry.Text use by default?', 'TwoWay', ['OneWay', 'OneTime', 'OneWayToSource'], 'Most controls default to OneWay, but input controls default to TwoWay.');
-mc('t9', 'What does Mode=OneTime do?', 'Reads the value once', ['Updates both directions', 'Sends data from UI to source only', 'Reads the value every second'], 'OneWay: source to UI. TwoWay: both. OneWayToSource: UI to source.');
+mc('t9', 'What does Mode=OneTime do?', 'Sets the target from the source once (and again only if BindingContext changes)', ['Updates both directions', 'Sends data from UI to source only', 'Reads the value every second'], 'OneWay: source to UI. TwoWay: both. OneWayToSource: UI to source.');
 mc('t9', 'Which mode goes only from the UI to the source?', 'OneWayToSource', ['OneWay', 'TwoWay', 'OneTime'], 'OneWay goes from source to UI.');
-tf('t9', 'Bindings are checked at compile time, so a wrong property name gives a build error.', false, 'They are resolved at run time.');
+tf('t9', 'Classic bindings (without x:DataType) are checked at compile time, so a wrong property name gives a build error.', false, 'Classic bindings are resolved at run time. Compiled bindings (x:DataType) are checked at build time and do report errors.');
 mc('t9', 'The data changed but the screen did not update. What is the most common cause?', 'The object did not raise PropertyChanged (no INotifyPropertyChanged)', ['The Label is too small', 'The page uses a Grid', 'StringFormat was used'], 'INotifyPropertyChanged is the doorbell telling the UI to look again.');
 mc('t9', 'Which methods does an IValueConverter have?', 'Convert and ConvertBack', ['Read and Write', 'Get and Set', 'Bind and Unbind'], 'Convert goes source to UI; ConvertBack goes UI to source.');
 fill('t9', 'The property that holds the source object for a page or control is ____', ['BindingContext'], 'It is passed down to all of the children.');
@@ -275,7 +275,7 @@ mc('t10', 'Which control shows a bound collection as a list?', 'CollectionView (
 cq('t10', 'What does this code-behind line do?', 'Connects the View to its ViewModel', ['Creates a database', 'Navigates to a new page', 'Defines a style'], 'Setting BindingContext lets the XAML bindings find properties and commands on the ViewModel.', 'BindingContext = new PeopleViewModel();');
 
 /* ---------- 11. Resources and Styles ---------- */
-mc('t11', 'Where does MAUI look for a resource key first?', 'Control, then page, then app (closest wins)', ['App, then page, then control', 'Only in App.xaml', 'Alphabetically'], 'The first match wins, so a page can override an app-wide value.');
+mc('t11', 'Where does MAUI look for a resource key first?', 'The control, then its parents up to the page, then App (closest wins)', ['App, then page, then control', 'Only in App.xaml', 'Alphabetically'], 'The first match wins, so a page can override an app-wide value. If no match is found, a XamlParseException is thrown.');
 mc('t11', 'What makes a style "explicit"?', 'It has an x:Key and only applies where requested', ['It has no key', 'It applies to every control', 'It is defined in C#'], 'Use Style="{StaticResource key}" to apply it.');
 mc('t11', 'What makes a style "implicit"?', 'No x:Key - it applies automatically to every control of its TargetType in scope', ['It must be applied by name', 'It only works on buttons', 'It is stored in the database'], 'An implicit style applies to all controls of that type in its scope.');
 mc('t11', 'How does StaticResource differ from DynamicResource?', 'Static is looked up once at load; Dynamic keeps watching for changes', ['Static can change at run time; Dynamic cannot', 'They are identical', 'Dynamic only works in App.xaml'], 'Use Static by default; Dynamic only when the value must change at run time (e.g. theme switching).');
@@ -284,7 +284,7 @@ fill('t11', 'Which attribute gives a resource its name? (x:____)', ['x:Key', 'Ke
 mc('t11', 'Resources defined in App.xaml are available...', 'Everywhere in the app', ['Only on the first page', 'Only in one control', 'Only in Shell'], 'Page.Resources is for one page; Control.Resources for one control.');
 mc('t11', 'The same key exists in App.xaml and in a page. Which value does a control on that page use?', 'The page\'s value (closest wins)', ['The App value', 'Neither - it is an error', 'Both are merged'], 'The closest scope overrides.');
 mc('t11', 'What does BasedOn do in a style?', 'Makes the style build on (inherit from) another style', ['Sets the target platform', 'Binds to data', 'Declares a colour'], 'Styles can build on each other using BasedOn.');
-tf('t11', 'A StaticResource must be defined earlier in the XAML than where it is used.', true, 'It is looked up once when the page loads.');
+tf('t11', 'Within a page, a StaticResource must be defined before (above) the element that uses it.', true, 'StaticResource performs a single lookup up the visual tree and then App.Resources when the element is created, so forward references in the same file are not supported.');
 mc('t11', 'You want controls to update when the app switches themes. Which do you use?', 'DynamicResource', ['StaticResource', 'x:Name', 'BindingContext'], 'It keeps watching so the control updates.');
 mc('t11', 'What does TargetType="Label" on a Style mean?', 'The style is for Label controls', ['The style can only be used once', 'The style is for one page', 'The style sets a namespace'], 'TargetType names the control type the style applies to.');
 
@@ -292,13 +292,13 @@ mc('t11', 'What does TargetType="Label" on a Style mean?', 'The style is for Lab
 mc('t12', 'Which Shell element shows pages as tabs along the bottom?', 'TabBar', ['FlyoutItem', 'ShellContent', 'ScrollView'], 'FlyoutItem puts pages in the slide-out menu.');
 mc('t12', 'Which Shell element puts a page in the slide-in side menu?', 'FlyoutItem', ['TabBar', 'Routing', 'ContentTemplate'], 'A flyout is a menu that slides in from the side.');
 fill('t12', 'The method used to navigate is Shell.Current.____Async("route")', ['GoTo', 'GoToAsync'], 'GoToAsync moves using routes.');
-mc('t12', 'What does a route starting with // mean?', 'Absolute - start from the top of the Shell', ['Relative - push a new page', 'Go back one page', 'Open a flyout'], 'A route without // is relative and pushes a new page onto the stack.');
+mc('t12', 'What does a route starting with // mean?', 'Absolute - start from the top of the Shell', ['Relative - push a new page', 'Go back one page', 'Open a flyout'], 'An absolute route (//) navigates from the top of the Shell hierarchy. A relative route without // pushes a page registered with Routing.RegisterRoute onto the stack.');
 mc('t12', 'Which route string goes back one page?', '..', ['//', '?id', 'back'], 'Use ".." to go back one page.');
 mc('t12', 'When must you call Routing.RegisterRoute?', 'For pages that are not part of the tabs or flyout, such as a details page', ['For every page including tabs', 'Only for the first page', 'Only on Android'], 'Pages in the TabBar/flyout already get routes from their ShellContent.');
 mc('t12', 'What does [QueryProperty(nameof(Id), "id")] do?', 'Receives a route parameter into the Id property', ['Sends a parameter to the route', 'Registers a route', 'Marks a primary key'], 'The page gets the value from the query string.');
 cq('t12', 'What does this code do?', 'Navigates to DetailPage and passes id = 5', ['Goes back one page', 'Registers DetailPage', 'Opens the flyout'], 'The ?key=value part is the query string that [QueryProperty] receives.', 'await Shell.Current.GoToAsync($"{nameof(DetailPage)}?id=5");');
 mc('t12', 'What is the benefit of ContentTemplate with DataTemplate?', 'Each page is created only when the user first visits it', ['Pages load faster on every visit', 'It registers a route automatically', 'It adds a flyout'], 'This keeps start-up fast.');
-tf('t12', 'A relative route (no //) pushes a new page onto the navigation stack.', true, 'Use ".." to go back.');
+tf('t12', 'A relative route (no //) to a page registered with Routing.RegisterRoute pushes it onto the navigation stack.', true, 'Relative routes only work for registered pages, not pages defined in AppShell.xaml. Use ".." to go back.');
 fill('t12', 'Set Shell.FlyoutBehavior="____" to turn the flyout off.', ['Disabled', 'disabled'], 'It can be turned on, off or locked.');
 mc('t12', 'What is a ShellContent?', 'One page inside the Shell', ['The whole navigation bar', 'A database record', 'A style'], 'It has a Title, Route and ContentTemplate.');
 
@@ -309,36 +309,36 @@ mc('t13', 'What does [AutoIncrement] do?', 'The database assigns 1, 2, 3... to n
 mc('t13', 'Where is the database file stored in a MAUI app?', 'In FileSystem.AppDataDirectory, a private folder for the app', ['In the Platforms folder', 'Next to MainPage.xaml', 'On a server'], 'The path is built once with Path.Combine(FileSystem.AppDataDirectory, "people.db3").');
 mc('t13', 'What is the purpose of the repository class?', 'Wrap all database code so pages never touch SQL directly', ['Draw the UI', 'Store styles', 'Handle navigation'], 'It holds the connection and creates the table the first time it is used (Init()).');
 mc('t13', 'Why are the database methods async and awaited?', 'Database work is slow; awaiting keeps the UI responsive instead of freezing it', ['To make SQL safer', 'To create tables faster', 'Because SQLite requires it'], 'All the methods end in Async.');
-fill('t13', 'Which method creates the table for class Person if missing? (CreateTable____<Person>)', ['Async', 'CreateTableAsync'], 'await conn.CreateTableAsync<Person>();');
+fill('t13', 'Which method creates the table for class Person if missing? (CreateTable____<Person>)', ['Async', 'async', 'CreateTableAsync'], 'await conn.CreateTableAsync<Person>();');
 tf('t13', 'SQLite needs a separate database server to be installed.', false, 'It is a small file-based database with no server.');
 mc('t13', 'What does the Init() method in the repository typically do?', 'Returns if already set up; otherwise opens the connection and creates the table', ['Deletes all rows', 'Sets the BindingContext', 'Registers routes'], 'Every method calls await Init() first.');
-mc('t13', 'Which class represents the connection in sqlite-net-pcl?', 'SQLiteAsyncConnection', ['SqliteConnection', 'DatabaseContext', 'SQLiteReader'], 'SqliteConnection (from Microsoft.Data.Sqlite) is a different class used in the ADO.NET chapter.');
+mc('t13', 'Which class does the guide use for the async connection in sqlite-net-pcl?', 'SQLiteAsyncConnection', ['SqliteConnection', 'DatabaseContext', 'SQLiteReader'], 'SqliteConnection (from Microsoft.Data.Sqlite) is a different class used in the ADO.NET chapter. (sqlite-net-pcl also has a synchronous SQLiteConnection; note the capital L.)');
 mc('t13', 'How does UpdateAsync know which row to change?', 'It matches by primary key', ['By the first column', 'By row position', 'By the Name column'], 'So the model needs a [PrimaryKey].');
 mc('t13', 'What does [MaxLength(250)] do?', 'Limits text length', ['Limits the number of rows', 'Sets a timeout', 'Sets the number of columns'], 'Other attributes: [Table], [Column], [Unique].');
-mc('t13', 'How is the repository made available to pages?', 'Registered with dependency injection in MauiProgram.cs and received in the constructor', ['It is a static global variable', 'It is set in App.xaml', 'It is created in every page'], 'builder.Services.AddSingleton(...) is used in the guide.');
+mc('t13', 'In the guide, how is the repository made available to pages?', 'Registered with dependency injection in MauiProgram.cs and received in the constructor', ['It is a static global variable', 'It is set in App.xaml', 'It is created in every page'], 'builder.Services.AddSingleton(...) is used in the guide.');
 tf('t13', 'You should always await database calls.', true, 'Otherwise the code may continue before the data is ready.');
 
 /* ---------- 14. Microsoft.Data.Sqlite ---------- */
-mc('t14', 'What is the correct order of the five steps of a database call?', 'Open connection, create command, set SQL + parameters, execute, read rows', ['Execute, open, create, read, set SQL', 'Create command, execute, open, read, set SQL', 'Read rows, open, create, set SQL, execute'], 'Connection, Command, CommandText, Parameters, Execute, Read.');
-mc('t14', 'Which method runs INSERT, UPDATE, DELETE or CREATE and returns the rows affected?', 'ExecuteNonQuery()', ['ExecuteScalar()', 'ExecuteReader()', 'Read()'], 'It is for statements that change data or structure.');
+mc('t14', 'What is the correct order of the five steps of a database call?', 'Open connection, create command, set SQL + parameters, execute, read rows', ['Execute, open, create, read, set SQL', 'Create command, execute, open, read, set SQL', 'Read rows, open, create, set SQL, execute'], '1 Open the connection, 2 CreateCommand, 3 set CommandText + Parameters, 4 Execute, 5 Read the rows.');
+mc('t14', 'Which method runs INSERT, UPDATE, DELETE or CREATE TABLE (statements that return no rows)?', 'ExecuteNonQuery()', ['ExecuteScalar()', 'ExecuteReader()', 'Read()'], 'It is for statements that change data or structure; for INSERT/UPDATE/DELETE it returns the number of rows affected.');
 mc('t14', 'Which method should you use for SELECT COUNT(*)?', 'ExecuteScalar()', ['ExecuteNonQuery()', 'ExecuteReader()', 'Open()'], 'It returns the first column of the first row.');
 mc('t14', 'Which method returns a data reader for queries that return rows?', 'ExecuteReader()', ['ExecuteNonQuery()', 'ExecuteScalar()', 'CreateCommand()'], 'Then loop with while (reader.Read()).');
 mc('t14', 'What prevents SQL injection?', 'Using parameters such as $id with Parameters.AddWithValue', ['Using ExecuteScalar', 'Using using var', 'Using a bigger connection string'], 'The database treats the value as pure data, never as code.');
 fill('t14', 'Which method adds a value for a placeholder? (Parameters.____)', ['AddWithValue'], 'insert.Parameters.AddWithValue("$name", "Ana");');
-mc('t14', 'What does using var do for a connection, command or reader?', 'Disposes it automatically when it goes out of scope, even if an error happens', ['Makes it faster', 'Makes the variable read-only', 'Makes the SQL safe'], 'Forgetting it can leave the database file locked.');
+mc('t14', 'What does using var do for a connection, command or reader?', 'Disposes it automatically when it goes out of scope, even if an error happens', ['Makes it faster', 'Makes the variable read-only', 'Makes the SQL safe'], 'Forgetting it can leave the connection open and the database file locked.');
 mc('t14', 'When does reader.Read() return false?', 'When there are no more rows', ['When the connection closes', 'When the first row is read', 'When there is an error'], 'The reader starts before the first row; each Read() moves to the next.');
-mc('t14', 'What is a typical connection string for a file called school.db?', 'Data Source=school.db', ['File=school.db', 'Server=school.db', 'Open=school.db'], 'If the file does not exist it is created when you open the connection.');
+mc('t14', 'What is a typical connection string for a file called school.db?', 'Data Source=school.db', ['File=school.db', 'Server=school.db', 'Open=school.db'], 'With the default Mode (ReadWriteCreate), the file is created when you open the connection if it does not exist.');
 fill('t14', 'Type the command that installs the library from NuGet: dotnet add package ____', ['Microsoft.Data.Sqlite'], 'Or use NuGet Package Manager in Visual Studio.');
 mc('t14', 'What is EF Core\'s relationship to Microsoft.Data.Sqlite?', 'EF Core is built on top of Microsoft.Data.Sqlite', ['Microsoft.Data.Sqlite is built on EF Core', 'They are unrelated', 'EF Core replaces SQLite'], 'sqlite-net-pcl is a separate small ORM.');
 tf('t14', 'Microsoft.Data.Sqlite is an ADO.NET provider for SQLite.', true, 'ADO.NET = connection, command, reader.');
 mc('t14', 'What happens if you run UPDATE or DELETE without WHERE?', 'It changes or removes every row', ['Only the first row', 'Nothing - it is an error', 'Only the last row'], 'Always add WHERE!');
 mc('t14', 'Which are the main SQLite storage types?', 'INTEGER, REAL, TEXT, BLOB', ['INT, FLOAT, STRING, BOOL', 'NUMBER, CHAR, DATE, OBJECT', 'BYTE, SHORT, LONG, DOUBLE'], 'Whole, decimal, text and raw bytes.');
 cq('t14', 'What is wrong with this code?', 'It builds SQL by joining user input, so it is open to SQL injection', ['Nothing is wrong', 'It uses the wrong connection string', 'It forgot Open()'], 'Use a parameter ($name) and Parameters.AddWithValue instead.', 'cmd.CommandText =\n    "SELECT * FROM student WHERE name = \'" + input + "\'";');
-tf('t14', 'Opening a connection to a database file that does not exist causes an error.', false, 'SQLite creates the file when you open the connection.');
+tf('t14', 'With a plain connection string like "Data Source=school.db", opening a file that does not exist causes an error.', false, 'The default Mode=ReadWriteCreate creates the file when you open the connection.');
 
 /* ---------- 15. Glossary ---------- */
 const GLOSSARY = [
-  ['Statement', 'One instruction in C#, ending with a semicolon.'],
+  ['Statement', 'One complete instruction in C#; simple statements end with a semicolon.'],
   ['Compiler', 'Checks your code and turns it into instructions .NET can run; reports syntax errors.'],
   ['Literal', 'A fixed value typed in code, such as 42 or "Hello".'],
   ['Variable', 'A named place in memory that stores a value of a certain type.'],
@@ -361,8 +361,8 @@ const GLOSSARY = [
   ['SQLite', 'A small, file-based database that needs no server.'],
   ['ADO.NET', 'The standard .NET set of database classes: connection, command, reader.'],
   ['SQL injection', 'Attack where user input is run as SQL; prevented with parameters.'],
-  ['Padding vs Margin', 'Padding is space inside a layout; Margin is space outside a control.'],
-  ['Implicit vs explicit style', 'Implicit has no key and applies to all of a type; explicit has a key and is applied by name.'],
+  ['Padding vs Margin', 'Padding is space inside an element (between it and its content); Margin is space outside an element (between it and its neighbours).'],
+  ['Implicit vs explicit style', 'Implicit has no x:Key and applies to every control of its TargetType in scope; explicit has an x:Key and is applied with Style="{StaticResource key}".'],
 ];
 GLOSSARY.forEach(([term, def], i) => {
   const others = GLOSSARY.filter((_, j) => j !== i).map(g => g[0]);
@@ -372,7 +372,7 @@ GLOSSARY.forEach(([term, def], i) => {
 });
 // a few fill-in glossary items
 fill('t15', 'The term for a fixed value typed straight into code (like 42 or "Hello") is a ____', ['literal'], 'Literal: a fixed value typed in code.');
-fill('t15', 'MVVM stands for Model-View-____', ['ViewModel', 'View Model'], 'Model (data), View (XAML), ViewModel (glue).');
+fill('t15', 'MVVM stands for Model-View-____', ['ViewModel', 'View Model', 'View-Model'], 'Model (data), View (XAML), ViewModel (glue).');
 fill('t15', 'The small, file-based database that needs no server is ____', ['SQLite', 'sqlite'], 'SQLite keeps data in a single file on the device.');
 
 QUESTIONS.forEach((q, i) => { q.id = i; });

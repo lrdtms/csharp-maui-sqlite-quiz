@@ -194,7 +194,12 @@
     renderQuestion();
   }
 
-  const norm = s => String(s).trim().replace(/\s+/g, ' ').replace(/\(\)$/, '').replace(/;$/, '').toLowerCase();
+  const norm = s => {
+    let t = String(s).trim().replace(/\s+/g, ' ').toLowerCase();
+    if (t.length > 2) t = t.replace(/\(\)$/, '');
+    if (t.length > 1) t = t.replace(/;$/, '');
+    return t;
+  };
   const isFillCorrect = (item, text) => item.q.answers.some(a => norm(a) === norm(text));
 
   function renderQuestion() {
@@ -324,7 +329,7 @@
   /* ---------- results ---------- */
   function finish() {
     run.items.forEach(item => {
-      if (item.q.type === 'fill') item.result = item.answer ? isFillCorrect(item, item.answer) : false;
+      if (item.q.type === 'fill') item.result = String(item.answer || '').trim() ? isFillCorrect(item, item.answer) : false;
       else item.result = item.answer !== null && item.answer === item.correctDisplay;
       item.locked = true;
     });
