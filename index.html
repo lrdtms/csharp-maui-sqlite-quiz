@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Builder · C#, MAUI &amp; SQLite</title>
+<meta name="description" content="Build a custom practice quiz from the C#, .NET MAUI and SQLite study guide.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap masthead__in">
+    <div class="brand">
+      <span class="brand__mark" aria-hidden="true">{ }</span>
+      <div>
+        <h1>Quiz Builder</h1>
+        <p>C# · .NET MAUI · SQLite study guide</p>
+      </div>
+    </div>
+    <div class="masthead__stat" id="poolStat" aria-live="polite"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ SETUP ============ -->
+  <section id="setup" class="view">
+    <div class="setup-grid">
+
+      <div class="col-topics">
+        <div class="section-head">
+          <h2>1 · Pick your topics</h2>
+          <div class="quick">
+            <button class="link" id="allOn">Select all</button>
+            <span aria-hidden="true">·</span>
+            <button class="link" id="allOff">Clear</button>
+          </div>
+        </div>
+        <div id="topicList" class="topic-list"></div>
+      </div>
+
+      <aside class="col-config">
+        <div class="panel">
+          <h2>2 · Shape the quiz</h2>
+
+          <div class="field">
+            <label for="countNum" class="field__label">Number of questions</label>
+            <div class="count">
+              <button class="step" id="countMinus" aria-label="Fewer questions">−</button>
+              <input id="countNum" type="number" min="1" inputmode="numeric" value="20">
+              <button class="step" id="countPlus" aria-label="More questions">+</button>
+            </div>
+            <input id="countRange" type="range" min="1" max="100" value="20" aria-label="Number of questions slider">
+            <div class="presets" id="presets"></div>
+            <p class="hint" id="countHint"></p>
+          </div>
+
+          <fieldset class="field">
+            <legend class="field__label">Question types</legend>
+            <div id="typeList" class="type-list"></div>
+            <p class="hint">Selected types are mixed evenly. If a type runs out, the others fill the gap.</p>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend class="field__label">Feedback</legend>
+            <div class="seg" role="radiogroup" aria-label="Feedback mode">
+              <label><input type="radio" name="mode" value="instant" checked><span>After each answer</span></label>
+              <label><input type="radio" name="mode" value="exam"><span>Exam mode (at the end)</span></label>
+            </div>
+          </fieldset>
+
+          <label class="check-row">
+            <input type="checkbox" id="shuffleQ" checked>
+            <span>Shuffle question order</span>
+          </label>
+
+          <div id="startWarn" class="warn" hidden></div>
+          <button class="btn btn--primary btn--block" id="startBtn">Start quiz</button>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz" class="view" hidden>
+    <div class="quiz-top">
+      <button class="link" id="quitBtn">← Quit to setup</button>
+      <div class="quiz-top__count" id="qCount"></div>
+    </div>
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progress"><span id="progressBar"></span></div>
+
+    <article class="card" id="qCard" aria-live="polite">
+      <div class="tags">
+        <span class="tag tag--topic" id="qTopic"></span>
+        <span class="tag tag--type" id="qType"></span>
+      </div>
+      <h2 class="q" id="qText"></h2>
+      <pre class="code" id="qCode" hidden></pre>
+      <div id="qAnswers"></div>
+      <div class="fb" id="qFeedback" hidden></div>
+    </article>
+
+    <div class="nav">
+      <button class="btn" id="prevBtn">← Back</button>
+      <div class="nav__r">
+        <button class="btn btn--primary" id="actionBtn">Next →</button>
+      </div>
+    </div>
+    <p class="kbd-hint">Keys: <kbd>1</kbd>–<kbd>4</kbd> choose · <kbd>Enter</kbd> submit / next</p>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" class="view" hidden>
+    <div class="score-card">
+      <div class="score-ring" id="scoreRing"><span id="scorePct"></span></div>
+      <div>
+        <h2 id="scoreTitle"></h2>
+        <p id="scoreSub"></p>
+        <div class="actions">
+          <button class="btn btn--primary" id="retryMissed">Retake missed questions</button>
+          <button class="btn" id="retrySame">Same settings, new quiz</button>
+          <button class="btn" id="toSetup">Change setup</button>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub-h">By topic</h3>
+    <div id="topicBreakdown" class="breakdown"></div>
+
+    <div class="review-head">
+      <h3 class="sub-h">Review</h3>
+      <div class="seg seg--sm" role="radiogroup" aria-label="Review filter">
+        <label><input type="radio" name="rf" value="all" checked><span>All</span></label>
+        <label><input type="radio" name="rf" value="wrong"><span>Missed</span></label>
+      </div>
+    </div>
+    <div id="reviewList" class="review"></div>
+  </section>
+
+</main>
+
+<footer class="wrap foot">Questions are written from the “C#, .NET MAUI and SQLite Study Guide”. Your settings are remembered on this device.</footer>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
